@@ -5,8 +5,8 @@ from data.users import User
 
 
 parser = reqparse.RequestParser()
-parser.add_argument('login')
-parser.add_argument('password')
+parser.add_argument('login', required=True, type=str)
+parser.add_argument('password', required=True, type=str)
 
 
 class RegisterRes(Resource):
@@ -22,9 +22,9 @@ class RegisterRes(Resource):
             return jsonify({'success': 'failed',
                             'message': 'Логин занят'})
         password = args['password']
-        if len(password) < 8:
-            jsonify({'success': 'failed'},
-                    'message:' 'Пароль слишком короткий')
+        if len(password) < 5:
+            return jsonify({'success': 'failed'},
+                           'message:' 'Пароль слишком короткий')
         user = User(login=login,
                     password=password)
         session.add(user)
@@ -35,14 +35,15 @@ class RegisterRes(Resource):
 class LoginRes(Resource):
     def post(self):
         args = parser.parse_args()
-        print('here', print(args['login'], args['password']))
         session = create_session()
-        user = session.query(User).filter(User.login == args['login']).fetchone()
+        user = session.query(User).filter(User.login == args['login']).first()
         if not user:
             return jsonify({'success': 'failed',
-                            'message': 'No user with this login'})
+                            'message': 'Введены неверные данные',
+                            'comment': 'No user with this login'})
         if not user.check_password(args['password']):
             return jsonify({'success': 'failed',
-                            'message': 'Wrong password'})
+                            'message': 'Введены неверные данные',
+                            'comment': 'Wrong password'})
         return jsonify({'success': 'OK',
                         'user': user.to_dict(only=('id', 'login'))})

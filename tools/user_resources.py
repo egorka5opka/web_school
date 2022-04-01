@@ -5,6 +5,6 @@ from data.users import User
 
 
 class UserRes(Resource):
-    def get(self):
-        return 'dude'
+    def get(self, user_id):
+        return "dude"
 
