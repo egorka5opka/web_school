@@ -11,20 +11,24 @@ parser.add_argument('password')
 
 class RegisterRes(Resource):
     def post(self):
-        print('start reg')
         args = parser.parse_args()
-        print('args')
-        print(args)
+        login = args['login']
+        if not login.isalnum():
+            return jsonify({'success': 'failed',
+                            'message': 'Логин должен состоять из букв и цифр'})
         session = create_session()
         search_login = session.query(User).filter(User.login == args['login']).first()
         if search_login:
             return jsonify({'success': 'failed',
                             'message': 'Логин занят'})
-        user = User(login=args['login'],
-                    password=args['password'])
+        password = args['password']
+        if len(password) < 8:
+            jsonify({'success': 'failed'},
+                    'message:' 'Пароль слишком короткий')
+        user = User(login=login,
+                    password=password)
         session.add(user)
         session.commit()
-        print('success')
         return jsonify({'success': 'OK', 'user': user.to_dict(only=('id', 'login'))})
 
 

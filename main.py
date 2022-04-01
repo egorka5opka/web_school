@@ -1,5 +1,5 @@
 from flask import render_template, redirect, jsonify
-from flask_login import LoginManager
+from flask_login import LoginManager, login_user
 from app.app import MainApp
 from forms.login_form import LoginForm
 from data.users import User
@@ -19,9 +19,15 @@ api.add_resource(LoginRes, '/api/v2/login')
 api.add_resource(UserRes, '/api/v2/user')
 
 
-@app.route("/")
-def root():
-    return "main page"
+@app.route('/')
+@app.route('/index')
+def index():
+    return render_template('index.html', title='Deskmate')
+
+
+@app.route('/creators')
+def creators():
+    return render_template('creators.html', title='Deskmate')
 
 
 @app.route('/login', methods=["GET", "POST"])
@@ -45,9 +51,14 @@ def register():
             return render_template('register.html', **params)
         register_data = {'login': form.login.data,
                          'password': form.password.data}
-        requests.post('http://localhost:8080/api/v2/register',
-                      data=register_data)
-        return redirect("/success")
+        result = requests.post('http://localhost:8080/api/v2/register',
+                                data=register_data).json()
+        if result['success'] == 'OK':
+            login_user(result['user'], remember=True)
+            return redirect("/")
+        params['message'] = result['message']
+        return render_template('register.html', **params)
+
     return render_template('register.html', **params)
 
 
