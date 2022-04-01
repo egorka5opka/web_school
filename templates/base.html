@@ -1,11 +1,45 @@
-<!DOCTYPE html>
-<html lang="en">
+<!doctype html>
+<html lang="ru">
 <head>
-    <meta charset="UTF-8">
-    <title>Title</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <link rel="stylesheet" type="text/css" href="static/css/style.css">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.1/dist/css/bootstrap.min.css"
+          rel="stylesheet" integrity="sha384-+0n0xVW2eSR5OomGNYDnhzAbDsOXxcvSN1TPprVMTNDbiYZCxYbOOl7+AMvyTG2x"
+          crossorigin="anonymous">
+    <title>{{title}}</title>
 </head>
 <body>
-{% block content %}
-{% endblock %}
+<header class="header_first">
+
+    <nav>
+        <a href="index">
+            <img class="logo" src="static/img/Deskmate_logo.png" alt="Deskmate">
+        </a>
+        <a class="lesson_history" href="history">
+            История
+        </a>
+        <a class="lesson_algebra" href="algebra">
+            Алгебра
+        </a>
+        <a class="lesson_geometry" href="geometry">
+            Геометрия
+        </a>
+        <a class="lesson_informatics" href="informatics">
+            Информатика
+        </a>
+        <a class="account" href="login">
+            <svg xmlns="http://www.w3.org/2000/svg" width="55" height="55"
+                 fill="currentColor" class="bi bi-person-fill" viewBox="0 0 16 16">
+                <path d="M3 14s-1 0-1-1 1-4 6-4 6 3 6 4-1 1-1 1H3zm5-6a3 3 0 1 0 0-6 3 3 0 0 0 0 6z"/>
+            </svg>
+        </a>
+    </nav>
+</header>
+<!-- Begin page content -->
+<main role="main" class="container">
+
+    {% block content %}{% endblock %}
+</main>
 </body>
 </html>

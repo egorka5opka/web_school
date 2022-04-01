@@ -1,0 +1,173 @@
+@font-face {
+	font-family: 'Lemonada';
+	src: url(/static/fonts/lemonada.ttf);
+}
+@font-face {
+	font-family: 'arial';
+	src: url(/static/fonts/arial.ttf);
+}
+@font-face {
+	font-family: 'arial_black';
+	src: url(/static/fonts/arial_black.ttf);
+}
+html, body, header {
+	margin: 0;
+}
+header.header_first {
+    position: fixed;
+    color: #ffffff;
+    background: #5b0009;
+    height: 105px;
+    left: 0px;
+    top: 0px;
+    right: 0px;
+    box-shadow: 0px 0px 100px 1px rgba(91, 0, 9, 0.3);
+}
+.logo {
+    position: fixed;
+    left: 30px;
+    top: 30px;
+}
+.lesson_algebra, .lesson_history, .lesson_geometry, .lesson_informatics {
+    position: fixed;
+    top: 10px;
+
+    font-family: 'arial';
+    font-weight: 700;
+    font-size: 40px;
+    line-height: 80px;
+    color: #e6d9da;
+    letter-spacing: 0.06em;
+    text-decoration: none;
+}
+.lesson_algebra:hover, .lesson_history:hover, .lesson_geometry:hover, .lesson_informatics:hover, .account:hover {
+    color: #ffffff;
+}
+.lesson_history {
+    width: 178px;
+    height: 80px;
+    left: 544px;
+
+}
+.lesson_algebra {
+    width: 178px;
+    height: 80px;
+    left: 782px;
+}
+.lesson_geometry {
+    width: 178px;
+    height: 80px;
+    left: 1013px;
+}
+.lesson_informatics {
+    width: 178px;
+    height: 80px;
+    left: 1299px;
+}
+.account {
+    position: fixed;
+    left: 94.84%;
+    right: 2.29%;
+    top: 25px;
+    bottom: 92.78%;
+
+    color: #e6d9da;
+}
+.deskmate_person {
+    position: absolute;
+    width: 465px;
+    height: 505px;
+    left: calc(50% - 465px/2);
+    top: 171px;
+
+}
+.main_page_text_logo {
+    position: absolute;
+    width: 472px;
+    height: 63px;
+    left: calc(50% - 472px/2);
+    top: 676px;
+
+    font-family: 'Lemonada';
+    font-style: strong;
+    font-weight: 700;
+    font-size: 80px;
+    line-height: 160px;
+    display: flex;
+    align-items: center;
+    text-align: center;
+
+    color: #5B0009;
+}
+.main_page_text {
+    position: absolute;
+    height: 49px;
+    left: calc(50% - 600px/2);
+    top: 773px;
+    font-weight: 575;
+    font-size: 50px;
+    line-height: 80px;
+    display: flex;
+    align-items: center;
+    text-align: center;
+    color: #5B0009;
+}
+.button_creators {
+    position: absolute;
+    left: calc(50% - 592px/2);
+    top: 862px;
+    padding: 16px 24px;
+    background: #5B0009;
+    color: #ffffff;
+    border-radius: 25px;
+}
+.button_creators:hover {
+    box-shadow: 0px 0px 54px 1px rgba(91, 0, 9, 0.25);
+}
+.heading_creators {
+    position: absolute;
+    width: 391px;
+    height: 53px;
+    left: calc(50% - 373px/2 + 0.5px);
+    top: 172px;
+
+    font-weight: 700;
+    font-size: 70px;
+    line-height: 140px;
+    display: flex;
+    align-items: center;
+    text-align: center;
+
+    color: #5B0009;
+}
+
+.Sonya_pic, .Egor_pic {
+    position: absolute;
+
+    height: 518px;
+    top: 296px;
+    border-radius: 63px;
+}
+.Sonya_pic {
+    width: 403px;
+    left: calc(50% - 403px - 45px);
+}
+.Egor_pic {
+    width: 401px;
+    left: calc(50% + 45px);
+}
+.creators_page_text {
+    position: absolute;
+    width: 1236px;
+    height: 138px;
+    left: calc(50% - 1236px/2);
+    top: 840px;
+    font-style: strong;
+    font-weight: 575;
+    font-size: 40px;
+    display: flex;
+    align-items: center;
+    text-align: center;
+
+    color: #5B0009;
+}
