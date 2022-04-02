@@ -7,6 +7,7 @@ from data.users import User
 from forms.register_form import RegisterForm
 from flask_restful import Api
 from tools.login_resources import RegisterRes, LoginRes
+from tools.math import one_arg_resources, two_args_resources
 import requests
 
 app = MainApp(__name__)
@@ -15,6 +16,10 @@ login_manager.init_app(app)
 api = Api(app)
 api.add_resource(RegisterRes, '/api/v2/register')
 api.add_resource(LoginRes, '/api/v2/login')
+api.add_resource(one_arg_resources.FactorialRes, 'api/v2/math/factorial')
+api.add_resource(one_arg_resources.FactorizationRes, 'api/v2/math/factorization')
+api.add_resource(two_args_resources.GCDRes, 'api/v2/math/gcd')
+api.add_resource(two_args_resources.LCMRes, 'api/v2/math/lcm')
 
 
 @app.route('/')
