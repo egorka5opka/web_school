@@ -109,23 +109,22 @@ header.header_first {
     color: #5B0009;
 }
 .button_creators {
-    position: absolute;
-    left: calc(50% - 592px/2);
-    top: 862px;
+    margin-left: calc(50% - 592px/2);
+    margin-right: calc(50% - 592px/2);
+    margin-top: 62px;
     padding: 16px 24px;
     background: #5B0009;
     color: #ffffff;
     border-radius: 25px;
 }
 .button_creators:hover {
-    box-shadow: 0px 0px 54px 1px rgba(91, 0, 9, 0.25);
+    box-shadow: 0px 0px 54px 1px rgba(91, 0, 9, 0.5);
 }
 .heading_creators {
-    position: absolute;
     width: 391px;
     height: 53px;
-    left: calc(50% - 373px/2 + 0.5px);
-    top: 172px;
+    margin-left: calc(50% - 373px/2 + 0.5px);
+    margin-top: 67px;
 
     font-weight: 700;
     font-size: 70px;
@@ -138,26 +137,23 @@ header.header_first {
 }
 
 .Sonya_pic, .Egor_pic {
-    position: absolute;
-
     height: 518px;
-    top: 296px;
+    margin-top: 55px;
     border-radius: 63px;
 }
 .Sonya_pic {
     width: 403px;
-    left: calc(50% - 403px - 45px);
+    margin-left: calc(50% - 403px - 45px);
 }
 .Egor_pic {
     width: 401px;
-    left: calc(50% + 45px);
+    margin-left: 90px;
 }
 .creators_page_text {
-    position: absolute;
     width: 1236px;
     height: 138px;
-    left: calc(50% - 1236px/2);
-    top: 840px;
+    margin-left: calc(50% - 1236px/2);
+    margin-top: 67px;
     font-style: strong;
     font-weight: 575;
     font-size: 40px;
