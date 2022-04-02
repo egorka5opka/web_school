@@ -1,0 +1,17 @@
+{% extends "base.html" %}
+
+{% block content %}
+<p class="heading_creators">
+    {{sbj}}
+</p>
+<p style="margin-top: 105px">
+    {% for item in btns.keys() %}
+        <p class="btn_second" >
+        <a style="color: #5B0009; text-decoration: none; margin: auto" href={{btns[item]}}>
+            {{item}}
+        </a>
+        </p>
+    {% endfor %}
+</p>
+<img class="down_pic" src="static/img/down_pic.png" alt="Deskmate">
+{% endblock %}
