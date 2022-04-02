@@ -74,19 +74,16 @@ header.header_first {
     color: #e6d9da;
 }
 .deskmate_person {
-    position: absolute;
     width: 465px;
     height: 505px;
-    left: calc(50% - 465px/2);
-    top: 171px;
-
+    margin-left: calc(50% - 465px/2);
+    margin-top: 71px;
 }
 .main_page_text_logo {
-    position: absolute;
     width: 472px;
     height: 63px;
-    left: calc(50% - 472px/2);
-    top: 676px;
+    margin-left: calc(50% - 472px/2);
+    margin-top: 0px;
 
     font-family: 'Lemonada';
     font-style: strong;
@@ -100,10 +97,9 @@ header.header_first {
     color: #5B0009;
 }
 .main_page_text {
-    position: absolute;
     height: 49px;
-    left: calc(50% - 600px/2);
-    top: 773px;
+    margin-left: calc(50% - 600px/2);
+    margin-top: 13px;
     font-weight: 575;
     font-size: 50px;
     line-height: 80px;
