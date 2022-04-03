@@ -6,7 +6,7 @@ from forms.login_form import LoginForm
 from data.users import User
 from forms.register_form import RegisterForm
 from flask_restful import Api
-from tools.login_resources import RegisterRes, LoginRes
+from tools.login_resources import RegisterRes, LoginRes, Dude
 from tools.math import one_arg_resources, two_args_resources
 import requests
 
@@ -16,10 +16,11 @@ login_manager.init_app(app)
 api = Api(app)
 api.add_resource(RegisterRes, '/api/v2/register')
 api.add_resource(LoginRes, '/api/v2/login')
-api.add_resource(one_arg_resources.FactorialRes, 'api/v2/math/factorial')
-api.add_resource(one_arg_resources.FactorizationRes, 'api/v2/math/factorization')
-api.add_resource(two_args_resources.GCDRes, 'api/v2/math/gcd')
-api.add_resource(two_args_resources.LCMRes, 'api/v2/math/lcm')
+api.add_resource(one_arg_resources.FactorialRes, '/api/v2/math/factorial')
+api.add_resource(one_arg_resources.FactorizationRes, '/api/v2/math/factorization')
+api.add_resource(two_args_resources.GCDRes, '/api/v2/math/gcd')
+api.add_resource(two_args_resources.LCMRes, '/api/v2/math/lcm')
+api.add_resource(Dude, '/api/v2/dude')
 
 
 @app.route('/')
@@ -42,6 +43,7 @@ def login():
         login_data = {'login': form.login.data,
                       'password': form.password.data}
         result = requests.post('http://localhost:8080/api/v2/login', data=login_data).json()
+        print(result)
         if result['success'] == 'OK':
             login_user(load_user(result['user']['id']), remember=True)
             return redirect('/')
@@ -62,6 +64,7 @@ def register():
         register_data = {'login': form.login.data,
                          'password': form.password.data}
         result = requests.post('http://localhost:8080/api/v2/register', data=register_data).json()
+        print(result)
         if result['success'] == 'OK':
             login_user(load_user(result['user']['id']), remember=True)
             return redirect('/')
@@ -76,6 +79,11 @@ def register():
 def logout():
     logout_user()
     return redirect("/")
+
+
+@app.route('/algebra')
+def algebra_page():
+    return render_template('algebra.html', title='Математика')
 
 
 @app.route('/success')

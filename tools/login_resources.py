@@ -5,8 +5,8 @@ from data.users import User
 
 
 parser = reqparse.RequestParser()
-parser.add_argument('login', required=True, type=str)
-parser.add_argument('password', required=True, type=str)
+parser.add_argument('login', required=True, location='form', type=str)
+parser.add_argument('password', required=True, location='form', type=str)
 
 
 class RegisterRes(Resource):
@@ -47,3 +47,11 @@ class LoginRes(Resource):
                             'comment': 'Wrong password'})
         return jsonify({'success': 'OK',
                         'user': user.to_dict(only=('id', 'login'))})
+
+# пасхалочка
+class Dude(Resource):
+    def get(self):
+        reqp = reqparse.RequestParser()
+        reqp.add_argument('name', location='args', type=str)
+        args = reqp.parse_args()
+        return 'dude: ' + args['name']

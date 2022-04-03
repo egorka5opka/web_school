@@ -3,7 +3,7 @@ from flask_restful import reqparse, abort, Resource
 
 
 parser = reqparse.RequestParser()
-parser.add_argument('num', required=True, type=int)
+parser.add_argument('num', required=True, location='form', type=int)
 
 
 class FactorizationRes(Resource):

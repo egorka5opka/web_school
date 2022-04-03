@@ -3,8 +3,8 @@ from flask_restful import reqparse, abort, Resource
 
 
 parser = reqparse.RequestParser()
-parser.add_argument('a', required=True, type=int)
-parser.add_argument('b', required=True, type=int)
+parser.add_argument('a', required=True, location='form', type=int)
+parser.add_argument('b', required=True, location='form', type=int)
 
 
 def gcd(a, b):

@@ -231,9 +231,11 @@ form > p {
 
 #register-link {
     text-align: center;
+    margin-top: 40px;
 }
 
 #register-link > a {
     color: #5B0009;
     text-decoration: none;
+    font-size: 28px;
 }
