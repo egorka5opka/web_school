@@ -23,8 +23,14 @@ class RegisterRes(Resource):
                             'message': 'Логин занят'})
         password = args['password']
         if len(password) < 5:
-            return jsonify({'success': 'failed'},
-                           'message:' 'Пароль слишком короткий')
+            return jsonify({'success': 'failed',
+                           'message': 'Пароль слишком короткий'})
+        if len(password) > 128:
+            return jsonify({'success': 'failed',
+                           'message': 'Пароль слишком длинный'})
+        if len(login) > 128:
+            return jsonify({'success': 'failed',
+                            'message': 'Логин слишком длинный'})
         user = User(login=login,
                     password=password)
         session.add(user)

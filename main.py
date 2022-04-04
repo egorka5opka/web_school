@@ -33,6 +33,7 @@ def index():
 def creators():
     return render_template('creators.html', title='Deskmate')
 
+
 @app.route('/history')
 def history():
     buttons = {'Изменить список дат' : 'change_dates',
@@ -40,22 +41,26 @@ def history():
                'Импортировать даты' : 'import_dates'}
     return render_template('subject.html', title='Deskmate', sbj='История', btns=buttons)
 
+
 @app.route('/algebra')
 def algebra():
     buttons = {'НОД и НОК' : 'gcd',
                'Разложить на простые' : 'decomposition'}
     return render_template('subject.html', title='Deskmate', sbj='Алгебра', btns=buttons)
 
+
 @app.route('/geometry')
 def geometry():
     buttons = {'Найти синус и косинус угла' : 'sin_cos'}
     return render_template('subject.html', title='Deskmate', sbj='Геометрия', btns=buttons)
+
 
 @app.route('/informatics')
 def informatics():
     buttons = {'Построить таблицу истинности': 'create_table',
                'Перевод между разными системами счисления' : 'translate'}
     return render_template('subject.html', title='Deskmate', sbj='Информатика', btns=buttons)
+
 
 @app.route('/login', methods=['GET', 'POST'])
 def login():
@@ -66,7 +71,6 @@ def login():
         login_data = {'login': form.login.data,
                       'password': form.password.data}
         result = requests.post('http://localhost:8080/api/v2/login', data=login_data).json()
-        print(result)
         if result['success'] == 'OK':
             login_user(load_user(result['user']['id']), remember=True)
             return redirect('/')
@@ -87,7 +91,6 @@ def register():
         register_data = {'login': form.login.data,
                          'password': form.password.data}
         result = requests.post('http://localhost:8080/api/v2/register', data=register_data).json()
-        print(result)
         if result['success'] == 'OK':
             login_user(load_user(result['user']['id']), remember=True)
             return redirect('/')
