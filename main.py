@@ -36,22 +36,22 @@ def creators():
 
 @app.route('/history')
 def history():
-    buttons = {'Изменить список дат' : 'change_dates',
-               'Тренажер' : 'trening',
-               'Импортировать даты' : 'import_dates'}
+    buttons = {'Изменить список дат': 'change_dates',
+               'Тренажер': 'trening',
+               'Импортировать даты': 'import_dates'}
     return render_template('subject.html', title='Deskmate', sbj='История', btns=buttons)
 
 
 @app.route('/algebra')
 def algebra():
-    buttons = {'НОД и НОК' : 'gcd',
-               'Разложить на простые' : 'decomposition'}
+    buttons = {'НОД и НОК': 'gcd',
+               'Разложить на простые': 'factorization'}
     return render_template('subject.html', title='Deskmate', sbj='Алгебра', btns=buttons)
 
 
 @app.route('/geometry')
 def geometry():
-    buttons = {'Найти синус и косинус угла' : 'sin_cos'}
+    buttons = {'Найти синус и косинус угла': 'sin_cos'}
     return render_template('subject.html', title='Deskmate', sbj='Геометрия', btns=buttons)
 
 
