@@ -8,6 +8,7 @@ from forms.register_form import RegisterForm
 from flask_restful import Api
 from tools.login_resources import RegisterRes, LoginRes, Dude
 from tools.math import one_arg_resources, two_args_resources
+from tools.history.history_resources import HistoryListRes, HistoryEventRes
 import requests
 
 app = MainApp(__name__)
@@ -21,6 +22,8 @@ api.add_resource(one_arg_resources.FactorizationRes, '/api/v2/math/factorization
 api.add_resource(two_args_resources.GCDRes, '/api/v2/math/gcd')
 api.add_resource(two_args_resources.LCMRes, '/api/v2/math/lcm')
 api.add_resource(Dude, '/api/v2/dude')
+api.add_resource(HistoryListRes, '/api/v2/history/event')
+api.add_resource(HistoryListRes, '/api/v2/history/event/<int:event_id>')
 
 
 @app.route('/')
