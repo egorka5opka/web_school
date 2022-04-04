@@ -74,19 +74,16 @@ header.header_first {
     color: #e6d9da;
 }
 .deskmate_person {
-    position: absolute;
     width: 465px;
     height: 505px;
-    left: calc(50% - 465px/2);
-    top: 171px;
-
+    margin-left: calc(50% - 465px/2);
+    margin-top: 71px;
 }
 .main_page_text_logo {
-    position: absolute;
     width: 472px;
     height: 63px;
-    left: calc(50% - 472px/2);
-    top: 676px;
+    margin-left: calc(50% - 472px/2);
+    margin-top: 0px;
 
     font-family: 'Lemonada';
     font-style: strong;
@@ -100,10 +97,9 @@ header.header_first {
     color: #5B0009;
 }
 .main_page_text {
-    position: absolute;
     height: 49px;
-    left: calc(50% - 600px/2);
-    top: 773px;
+    margin-left: calc(50% - 600px/2);
+    margin-top: 13px;
     font-weight: 575;
     font-size: 50px;
     line-height: 80px;
@@ -113,28 +109,29 @@ header.header_first {
     color: #5B0009;
 }
 .button_creators {
-    position: absolute;
-    left: calc(50% - 592px/2);
-    top: 862px;
+    margin-left: calc(50% - 592px/2);
+    margin-right: calc(50% - 592px/2);
+    margin-top: 62px;
+    margin-bottom: 50px;
     padding: 16px 24px;
     background: #5B0009;
     color: #ffffff;
     border-radius: 25px;
 }
 .button_creators:hover {
-    box-shadow: 0px 0px 54px 1px rgba(91, 0, 9, 0.25);
+    box-shadow: 0px 0px 54px 1px rgba(91, 0, 9, 0.5);
 }
 .heading_creators {
-    position: absolute;
-    width: 391px;
+    width: 450px;
     height: 53px;
-    left: calc(50% - 373px/2 + 0.5px);
-    top: 172px;
+    margin-left: auto;
+    margin-right: auto;
+    margin-top: 67px;
+    margin-bottom: 70px;
 
     font-weight: 700;
     font-size: 70px;
     line-height: 140px;
-    display: flex;
     align-items: center;
     text-align: center;
 
@@ -142,26 +139,23 @@ header.header_first {
 }
 
 .Sonya_pic, .Egor_pic {
-    position: absolute;
-
     height: 518px;
-    top: 296px;
+    margin-top: 55px;
     border-radius: 63px;
 }
 .Sonya_pic {
     width: 403px;
-    left: calc(50% - 403px - 45px);
+    margin-left: calc(50% - 403px - 45px);
 }
 .Egor_pic {
     width: 401px;
-    left: calc(50% + 45px);
+    margin-left: 90px;
 }
 .creators_page_text {
-    position: absolute;
     width: 1236px;
     height: 138px;
-    left: calc(50% - 1236px/2);
-    top: 840px;
+    margin-left: calc(50% - 1236px/2);
+    margin-top: 67px;
     font-style: strong;
     font-weight: 575;
     font-size: 40px;
@@ -171,6 +165,34 @@ header.header_first {
 
     color: #5B0009;
 }
+.down_pic {
+    position: fixed;
+    left: 0px;
+    top: calc(100% - 373px);
+}
+.btn_second {
+    margin-left: 50px;
+    margin-right: 50px;
+    margin-top: 55px;
+    margin-bottom: 50px;
+
+    font-weight: 700;
+    font-size: 40px;
+    line-height: 80px;
+
+    display: flex;
+    align-items: center;
+    text-align: right;
+    color: #5B0009;
+
+    border: 1px solid #5B0009;
+    padding: 16px 24px;
+    box-shadow: 0px 0px 70px 1px rgba(91, 0, 9, 0.25);
+    border-radius: 25px;
+}
+.btn_second:hover {
+    box-shadow: 0px 0px 70px 1px rgba(91, 0, 9, 0.5);
+}
 
 main {
     margin-top: 110px;
@@ -178,9 +200,10 @@ main {
 }
 
 .btn {
-    background-color: #5B0009;
-    border-radius: 15px;
-    border: none;
+    padding: 16px 24px;
+    background: #5B0009;
+    color: #ffffff;
+    border-radius: 25px;
 }
 .btn:hover {
     background: #80000d;

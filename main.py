@@ -33,6 +33,29 @@ def index():
 def creators():
     return render_template('creators.html', title='Deskmate')
 
+@app.route('/history')
+def history():
+    buttons = {'Изменить список дат' : 'change_dates',
+               'Тренажер' : 'trening',
+               'Импортировать даты' : 'import_dates'}
+    return render_template('subject.html', title='Deskmate', sbj='История', btns=buttons)
+
+@app.route('/algebra')
+def algebra():
+    buttons = {'НОД и НОК' : 'gcd',
+               'Разложить на простые' : 'decomposition'}
+    return render_template('subject.html', title='Deskmate', sbj='Алгебра', btns=buttons)
+
+@app.route('/geometry')
+def geometry():
+    buttons = {'Найти синус и косинус угла' : 'sin_cos'}
+    return render_template('subject.html', title='Deskmate', sbj='Геометрия', btns=buttons)
+
+@app.route('/informatics')
+def informatics():
+    buttons = {'Построить таблицу истинности': 'create_table',
+               'Перевод между разными системами счисления' : 'translate'}
+    return render_template('subject.html', title='Deskmate', sbj='Информатика', btns=buttons)
 
 @app.route('/login', methods=['GET', 'POST'])
 def login():
