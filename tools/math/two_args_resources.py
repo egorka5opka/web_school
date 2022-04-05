@@ -33,4 +33,4 @@ class LCMRes(Resource):
                             'message': 'Числа должны быть неотрицательны'})
         d = gcd(a, b)
         return jsonify({'success': 'OK',
-                        'result': a / d * b})
+                        'result': a // d * b})

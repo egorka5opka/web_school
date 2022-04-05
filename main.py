@@ -3,6 +3,7 @@ from flask_login import LoginManager, login_user, login_required, logout_user
 from app.app import MainApp
 from data.db_session import create_session
 from forms.login_form import LoginForm
+from forms.gcd_form import GcdForm
 from data.users import User
 from forms.register_form import RegisterForm
 from flask_restful import Api
@@ -47,6 +48,29 @@ def algebra():
     buttons = {'НОД и НОК': 'gcd',
                'Разложить на простые': 'factorization'}
     return render_template('subject.html', title='Deskmate', sbj='Алгебра', btns=buttons)
+
+
+@app.route('/gcd', methods=['GET', 'POST'])
+def gcd_page():
+    form = GcdForm()
+    params = {'title': "НОД и НОК", 'form' : form}
+    if form.validate_on_submit():
+        gcd_data = {'a': form.first_number.data, 'b': form.second_number.data}
+        result_gcd = requests.get('http://localhost:8080/api/v2/math/gcd', data=gcd_data).json()
+        result_lcm = requests.get('http://localhost:8080/api/v2/math/lcm', data=gcd_data).json()
+
+        if result_gcd['success'] == 'OK':
+            params['result_gcd'] = result_gcd['result']
+        else:
+            params['message'] = result_gcd['message']
+
+        if result_lcm['success'] == 'OK':
+            params['result_lcm'] = result_lcm['result']
+        else:
+            params['message'] = result_lcm['message']
+
+        return render_template('gcd.html', **params)
+    return render_template('gcd.html', **params)
 
 
 @app.route('/geometry')

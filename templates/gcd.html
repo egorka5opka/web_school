@@ -1,0 +1,46 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<div class="shadow-lg p-3 mb-5 bg-body centre-block">
+    <h1>НОД и НОК</h1>
+    <form action="" method="post">
+        {{ form.hidden_tag() }}
+        <p>
+            {{ form.first_number.label }}<br>
+            {{ form.first_number(class="form-control input-field", type="integer") }}<br>
+            {% for error in form.first_number.errors %}
+                <p class="alert alert-danger" role="alert">
+                    {{ error }}
+                </p>
+            {% endfor %}
+        </p>
+        <p>
+            {{ form.second_number.label }}<br>
+            {{ form.second_number(class="form-control input-field", type="integer") }}<br>
+            {% for error in form.second_number.errors %}
+                <p class="alert alert-danger" role="alert">
+                    {{ error }}
+                </p>
+            {% endfor %}
+        </p>
+        {% if message %}
+            <p class="alert alert-danger" role="alert">
+                {{message}}
+            </p>
+        {% endif %}
+        <p id="submit-par-btn">{{ form.submit(type="submit", class="btn btn-primary") }}</p>
+        {% if result_gcd %}
+            <p class="alert alert-light" role="alert">
+                НОД: {{result_gcd}}
+            </p>
+        {% endif %}
+        {% if result_lcm %}
+            <p class="alert alert-light" role="alert">
+                НОК: {{result_lcm}}
+            </p>
+        {% endif %}
+    </form>
+
+</div>
+{% endblock %}
