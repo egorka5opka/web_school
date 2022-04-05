@@ -1,0 +1,33 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<div class="shadow-lg p-3 mb-5 bg-body centre-block">
+    <h1>Факторизация</h1>
+    <form action="" method="post">
+        {{ form.hidden_tag() }}
+        <p>
+            {{ form.number.label }}<br>
+            {{ form.number(class="form-control input-field", type="integer") }}<br>
+            {% for error in form.number.errors %}
+                <p class="alert alert-danger" role="alert">
+                    {{ error }}
+                </p>
+            {% endfor %}
+        </p>
+        {% if message %}
+            <p class="alert alert-danger" role="alert">
+                {{message}}
+            </p>
+        {% endif %}
+        <p id="submit-par-btn">{{ form.submit(type="submit", class="btn btn-primary") }}</p>
+
+        {% if result %}
+            <p class="alert alert-light" role="alert">
+                {{result}}
+            </p>
+        {% endif %}
+    </form>
+
+</div>
+{% endblock %}

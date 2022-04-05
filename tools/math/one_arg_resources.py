@@ -17,9 +17,11 @@ class FactorizationRes(Resource):
         div = 2
         while div**2 <= num:
             while num % div == 0:
-                num /= div
-                primes.append(num)
+                num //= div
+                primes.append(div)
             div += 1
+        if num > 1:
+            primes.append(num)
         return jsonify({'success': 'OK',
                         'result': primes})
 

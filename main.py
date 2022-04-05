@@ -4,6 +4,7 @@ from app.app import MainApp
 from data.db_session import create_session
 from forms.login_form import LoginForm
 from forms.gcd_form import GcdForm
+from forms.factorization_form import FactorizationForm
 from data.users import User
 from forms.register_form import RegisterForm
 from flask_restful import Api
@@ -71,6 +72,22 @@ def gcd_page():
 
         return render_template('gcd.html', **params)
     return render_template('gcd.html', **params)
+
+@app.route('/factorization', methods=['GET', 'POST'])
+def factorization_form():
+    form = FactorizationForm()
+    params = {'title': "Факторизация", 'form': form}
+    if form.validate_on_submit():
+        fac_data = {'num': form.number.data}
+        result = requests.get('http://localhost:8080/api/v2/math/factorization', data=fac_data).json()
+        print(result)
+
+        if result['success'] == 'OK':
+            params['result'] = ', '.join([str(i) for i in result['result']])
+        else:
+            params['message'] = result['message']
+        return render_template('factorization.html', **params)
+    return render_template('factorization.html', **params)
 
 
 @app.route('/geometry')
