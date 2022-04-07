@@ -37,4 +37,4 @@ class FactorialRes(Resource):
         for i in range(2, num + 1):
             factorial *= i
         return jsonify({'success': 'OK',
-                        'message': factorial})
+                        'result': factorial})

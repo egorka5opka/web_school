@@ -5,11 +5,12 @@ from data.db_session import create_session
 from forms.login_form import LoginForm
 from forms.gcd_form import GcdForm
 from forms.factorization_form import FactorizationForm
+from forms.geron_from import GeronForm
 from data.users import User
 from forms.register_form import RegisterForm
 from flask_restful import Api
 from tools.login_resources import RegisterRes, LoginRes, Dude
-from tools.math import one_arg_resources, two_args_resources
+from tools.math import one_arg_resources, two_args_resources, three_args_resources
 import requests
 
 app = MainApp(__name__)
@@ -23,6 +24,7 @@ api.add_resource(one_arg_resources.FactorizationRes, '/api/v2/math/factorization
 api.add_resource(two_args_resources.GCDRes, '/api/v2/math/gcd')
 api.add_resource(two_args_resources.LCMRes, '/api/v2/math/lcm')
 api.add_resource(Dude, '/api/v2/dude')
+api.add_resource(three_args_resources.GeronRes, '/api/v2/math/geron')
 
 
 @app.route('/')
@@ -47,7 +49,8 @@ def history():
 @app.route('/algebra')
 def algebra():
     buttons = {'НОД и НОК': 'gcd',
-               'Разложить на простые': 'factorization'}
+               'Разложить на простые': 'factorization',
+               'Факториал числа': 'factorial'}
     return render_template('subject.html', title='Deskmate', sbj='Алгебра', btns=buttons)
 
 
@@ -89,11 +92,39 @@ def factorization_form():
         return render_template('factorization.html', **params)
     return render_template('factorization.html', **params)
 
+@app.route('/factorial', methods=['GET', 'POST'])
+def factorial_form():
+    form = FactorizationForm()
+    params = {'title': "Факториал", 'form': form}
+    if form.validate_on_submit():
+        fac_data = {'num': form.number.data}
+        result = requests.get('http://localhost:8080/api/v2/math/factorial', data=fac_data).json()
+        if result['success'] == 'OK':
+            params['result'] = result['result']
+        else:
+            params['message'] = result['message']
+        return render_template('factorization.html', **params)
+    return render_template('factorization.html', **params)
+
 
 @app.route('/geometry')
 def geometry():
-    buttons = {'Найти синус и косинус угла': 'sin_cos'}
+    buttons = {'Посчитать площадь треугольника через стороны': 'geron'}
     return render_template('subject.html', title='Deskmate', sbj='Геометрия', btns=buttons)
+
+@app.route('/geron', methods=['GET', 'POST'])
+def geron_form():
+    form = GeronForm()
+    params = {'title': "Факториал", 'form': form}
+    if form.validate_on_submit():
+        geron_data = {'a': form.first_number.data, 'b': form.second_number.data, 'c': form.third_number.data}
+        result = requests.get('http://localhost:8080/api/v2/math/geron', data=geron_data).json()
+        if result['success'] == 'OK':
+            params['result'] = result['result']
+        else:
+            params['message'] = result['message']
+        return render_template('geron.html', **params)
+    return render_template('geron.html', **params)
 
 
 @app.route('/informatics')

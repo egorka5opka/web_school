@@ -1,0 +1,51 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<div class="shadow-lg p-3 mb-5 bg-body centre-block">
+    <h1>{{title}}</h1>
+    <form action="" method="post">
+        {{ form.hidden_tag() }}
+        <p>
+            {{ form.first_number.label }}<br>
+            {{ form.first_number(class="form-control input-field", type="float") }}<br>
+            {% for error in form.first_number.errors %}
+                <p class="alert alert-danger" role="alert">
+                    {{ error }}
+                </p>
+            {% endfor %}
+        </p>
+        <p>
+            {{ form.second_number.label }}<br>
+            {{ form.second_number(class="form-control input-field", type="float") }}<br>
+            {% for error in form.second_number.errors %}
+                <p class="alert alert-danger" role="alert">
+                    {{ error }}
+                </p>
+            {% endfor %}
+        </p>
+        <p>
+            {{ form.third_number.label }}<br>
+            {{ form.third_number(class="form-control input-field", type="float") }}<br>
+            {% for error in form.third_number.errors %}
+                <p class="alert alert-danger" role="alert">
+                    {{ error }}
+                </p>
+            {% endfor %}
+        </p>
+        {% if message %}
+            <p class="alert alert-danger" role="alert">
+                {{message}}
+            </p>
+        {% endif %}
+        <p id="submit-par-btn">{{ form.submit(type="submit", class="btn btn-primary") }}</p>
+
+        {% if result %}
+            <p class="alert alert-light" role="alert">
+                {{result}}
+            </p>
+        {% endif %}
+    </form>
+
+</div>
+{% endblock %}
