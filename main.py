@@ -23,7 +23,7 @@ api.add_resource(two_args_resources.GCDRes, '/api/v2/math/gcd')
 api.add_resource(two_args_resources.LCMRes, '/api/v2/math/lcm')
 api.add_resource(Dude, '/api/v2/dude')
 api.add_resource(HistoryListRes, '/api/v2/history/event')
-api.add_resource(HistoryListRes, '/api/v2/history/event/<int:event_id>')
+api.add_resource(HistoryEventRes, '/api/v2/history/event/<int:event_id>')
 
 
 @app.route('/')
@@ -39,8 +39,9 @@ def creators():
 
 @app.route('/history')
 def history():
-    buttons = {'Изменить список дат': 'change_dates',
-               'Тренажер': 'trening',
+    buttons = {'Список дат': 'history_events',
+               'Изменить список дат': 'change_dates',
+               'Тренажер': 'training',
                'Импортировать даты': 'import_dates'}
     return render_template('subject.html', title='Deskmate', sbj='История', btns=buttons)
 

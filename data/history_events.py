@@ -6,6 +6,7 @@ from .db_session import SqlAlchemyBase
 
 
 class HistoryEvent(SqlAlchemyBase, SerializerMixin):
+    __tablename__ = 'events'
     id = sqlalchemy.Column(sqlalchemy.Integer, primary_key=True, autoincrement=True, index=True)
     year = sqlalchemy.Column(sqlalchemy.Integer, index=True, nullable=False)
     event = sqlalchemy.Column(sqlalchemy.String, nullable=True)
