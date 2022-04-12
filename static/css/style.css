@@ -262,3 +262,7 @@ form > p {
     text-decoration: none;
     font-size: 28px;
 }
+
+.item_btn {
+    padding: 2px 3px;
+}

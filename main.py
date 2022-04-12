@@ -1,10 +1,11 @@
-from flask import render_template, redirect, jsonify
-from flask_login import LoginManager, login_user, login_required, logout_user
+from flask import render_template, redirect, jsonify, request, abort
+from flask_login import LoginManager, login_user, login_required, logout_user, current_user
 from app.app import MainApp
 from data.db_session import create_session
 from forms.login_form import LoginForm
 from data.users import User
 from forms.register_form import RegisterForm
+from forms.history_event_from import EventFrom
 from flask_restful import Api
 from tools.login_resources import RegisterRes, LoginRes, Dude
 from tools.math import one_arg_resources, two_args_resources
@@ -39,11 +40,72 @@ def creators():
 
 @app.route('/history')
 def history():
-    buttons = {'Список дат': 'history_events',
-               'Изменить список дат': 'change_dates',
-               'Тренажер': 'training',
-               'Импортировать даты': 'import_dates'}
-    return render_template('subject.html', title='Deskmate', sbj='История', btns=buttons)
+    buttons = {'Список дат': '/history/events',
+               'Тренажер': '/history/training',
+               'Импортировать даты': '/history/import'}
+    return render_template('subject.html', title='История', sbj='История', btns=buttons)
+
+
+@app.route('/history/events')
+@login_required
+def history_events():
+    events = requests.get('http://localhost:8080/api/v2/history/event').json()
+    params = {'title': 'Deskmate', 'events': events}
+    return render_template('history_events.html', **params)
+
+
+@app.route('/history/event/<int:event_id>', methods=['GET', 'POST'])
+@login_required
+def edit_event(event_id):
+    form = EventFrom()
+    params = {'title': 'История', 'btn': 'Изменить'}
+    if request.method == 'GET':
+        response = requests.get(f'http://localhost:8080/api/v2/history/event/{event_id}').json()
+        if response.get('success', 'failed') == 'failed':
+            abort(404)
+        event = response.get('event')
+        params['title'] = event['event']
+        form.year.data = event.get('year', None)
+        form.event.data = event.get('event', None)
+        form.description.data = event.get('description', None)
+    params['form'] = form
+    if form.validate_on_submit():
+        data = {'year': form.year.data,
+                'event': form.event.data,
+                'description': form.description.data,
+                'user_id': current_user.id}
+        result = requests.post(f'http://localhost:8080/api/v2/history/event/{event_id}', data=data).json()
+        if result.get('success', 'failed') == 'OK':
+            return redirect('/history/events')
+        params['message'] = result.get('message', 'Непердвиденная ошибка')
+    return render_template('new_event.html', **params)
+
+
+@app.route('/history/add_event', methods=['GET', 'POST'])
+@login_required
+def add_event():
+    form = EventFrom()
+    params = {'title': 'История',
+              'form': form,
+              'btn': 'Создать'}
+    if form.validate_on_submit():
+        data = {'year': form.year.data,
+                'event': form.event.data,
+                'description': form.description.data,
+                'user_id': current_user.id}
+        result = requests.post('http://localhost:8080/api/v2/history/event', data=data).json()
+        if result.get('success', 'failed') == 'OK':
+            return redirect('/history/events')
+        params['message'] = result.get('message', 'Непердвиденная ошибка')
+    return render_template('new_event.html', **params)
+
+
+@app.route('/history/delete/<int:event_id>')
+def delete_event(event_id):
+    result = requests.delete(f'http://localhost:8080/api/v2/history/event/{event_id}').json()
+    if result.get('success', 'failed') == 'failed':
+        abort(404)
+    return redirect('/history/events')
 
 
 @app.route('/algebra')

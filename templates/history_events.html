@@ -1,0 +1,21 @@
+{% extends "base.html" %}
+
+{% block content %}
+    <h1>Исторические события</h1>
+    {% for item in events%}
+        <div class="col-md6 border rounded">
+            <h4>{{item.event}} - {{item.year}}</h4>
+            <p>
+                {{item.description}}
+            </p>
+            <a href="/history/event/{{ item.id }}" class="btn item_btn">
+                Изменить
+            </a>
+            <a href="/history/delete/{{ item.id }}" class="btn item_btn">
+                Удалить
+            </a>
+        </div>
+    {% endfor %}
+    <a href="add_event" class="btn"> Добавить событие</a>
+
+{% endblock %}
