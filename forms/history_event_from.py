@@ -3,7 +3,7 @@ from wtforms import IntegerField, StringField, TextAreaField, SubmitField
 from wtforms.validators import DataRequired
 
 
-class EventFrom(FlaskForm):
+class EventForm(FlaskForm):
     year = IntegerField('Год', validators=[DataRequired()])
     event = StringField('Название')
     description = TextAreaField('Описание')

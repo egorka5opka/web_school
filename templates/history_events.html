@@ -2,6 +2,7 @@
 
 {% block content %}
     <h1>Исторические события</h1>
+    {% if events %}
     {% for item in events%}
         <div class="col-md6 border rounded">
             <h4>{{item.event}} - {{item.year}}</h4>
@@ -16,6 +17,7 @@
             </a>
         </div>
     {% endfor %}
+    {% endif %}
     <a href="add_event" class="btn"> Добавить событие</a>
 
 {% endblock %}
