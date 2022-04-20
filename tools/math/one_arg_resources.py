@@ -38,3 +38,4 @@ class FactorialRes(Resource):
             factorial *= i
         return jsonify({'success': 'OK',
                         'result': factorial})
+

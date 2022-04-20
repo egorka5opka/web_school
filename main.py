@@ -6,11 +6,12 @@ from forms.login_form import LoginForm
 from forms.gcd_form import GcdForm
 from forms.factorization_form import FactorizationForm
 from forms.geron_from import GeronForm
+from forms.create_table import CreateTableForm
 from data.users import User
 from forms.register_form import RegisterForm
 from flask_restful import Api
 from tools.login_resources import RegisterRes, LoginRes, Dude
-from tools.math import one_arg_resources, two_args_resources, three_args_resources
+from tools.math import one_arg_resources, two_args_resources, three_args_resources, inf_one_arg_resources
 import requests
 
 app = MainApp(__name__)
@@ -25,6 +26,7 @@ api.add_resource(two_args_resources.GCDRes, '/api/v2/math/gcd')
 api.add_resource(two_args_resources.LCMRes, '/api/v2/math/lcm')
 api.add_resource(Dude, '/api/v2/dude')
 api.add_resource(three_args_resources.GeronRes, '/api/v2/math/geron')
+api.add_resource(inf_one_arg_resources.TruthTable, '/api/v2/inf/truth_table')
 
 
 @app.route('/')
@@ -133,6 +135,20 @@ def informatics():
                'Перевод между разными системами счисления' : 'translate'}
     return render_template('subject.html', title='Deskmate', sbj='Информатика', btns=buttons)
 
+@app.route('/create_table', methods=['GET', 'POST'])
+def create_table_form():
+    form = CreateTableForm()
+    params = {'title': "Таблица истинности", 'form': form}
+    if form.validate_on_submit():
+        table_data = {'inpt' : form.expression.data}
+        result = requests.get('http://localhost:8080/api/v2/inf/truth_table', data=table_data).json()
+        if result['success'] == 'OK':
+            params['header'] = result['header']
+            params['result'] = result['result']
+        else:
+            params['message'] = result['message']
+        return render_template('truth_table.html', **params)
+    return render_template('truth_table.html', **params)
 
 @app.route('/login', methods=['GET', 'POST'])
 def login():

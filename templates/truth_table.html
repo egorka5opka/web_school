@@ -1,0 +1,58 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<div class="shadow-lg p-3 mb-5 bg-body centre-block">
+    <h1>{{title}}</h1>
+    <form action="" method="post">
+        {{ form.hidden_tag() }}
+        <p>
+            {{ form.expression.label }}<br>
+            {{ form.expression(class="form-control input-field", type="string") }}<br>
+            {% for error in form.expression.errors %}
+                <p class="alert alert-danger" role="alert">
+                    {{ error }}
+                </p>
+            {% endfor %}
+        </p>
+        {% if message %}
+            <p class="alert alert-danger" role="alert">
+                {{message}}
+            </p>
+        {% endif %}
+        <p>
+            Переменный обозначаются английскийми буквами <br>
+            Справка как можно обозначать операции: <br>
+            Конъюнкция: & <br>
+            Дизъюнкция: | <br>
+            Инверсия: ! <br>
+            Исключающее ИЛИ: ^ <br>
+            Эквивалентность: == <br>
+            Импликация: -> <br>
+        </p>
+        <p id="submit-par-btn">{{ form.submit(type="submit", class="btn btn-primary") }}</p>
+
+        {% if result %}
+            <p class="alert alert-light" role="alert">
+                <table class="table_inf">
+                    <tr>
+                        {% for i in header %}
+                        <th  class="table_inf_th">{{i}}</th>
+                        {% endfor %}
+                    </tr>
+                {% for item in result %}
+                    <tr>
+                        {% for i in item %}
+                            <td  class="table_inf_td">
+                                {{i}}
+                            </td>
+                        {% endfor %}
+                    </tr>
+                {% endfor %}
+                </table>
+            </p>
+        {% endif %}
+    </form>
+
+</div>
+{% endblock %}
