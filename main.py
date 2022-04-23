@@ -7,6 +7,7 @@ from forms.gcd_form import GcdForm
 from forms.factorization_form import FactorizationForm
 from forms.geron_from import GeronForm
 from forms.create_table import CreateTableForm
+from forms.translate_form import TranslateForm
 from data.users import User
 from forms.register_form import RegisterForm
 from flask_restful import Api
@@ -149,6 +150,10 @@ def create_table_form():
             params['message'] = result['message']
         return render_template('truth_table.html', **params)
     return render_template('truth_table.html', **params)
+
+@app.route('/translate', methods=['GET', 'POST'])
+def translate():
+    form = TranslateForm()
 
 @app.route('/login', methods=['GET', 'POST'])
 def login():
