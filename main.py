@@ -12,7 +12,8 @@ from data.users import User
 from forms.register_form import RegisterForm
 from flask_restful import Api
 from tools.login_resources import RegisterRes, LoginRes, Dude
-from tools.math import one_arg_resources, two_args_resources, three_args_resources, inf_one_arg_resources
+from tools.math import one_arg_resources, two_args_resources, three_args_resources, inf_one_arg_resources, \
+    inf_three_arg_resources
 import requests
 
 app = MainApp(__name__)
@@ -28,6 +29,7 @@ api.add_resource(two_args_resources.LCMRes, '/api/v2/math/lcm')
 api.add_resource(Dude, '/api/v2/dude')
 api.add_resource(three_args_resources.GeronRes, '/api/v2/math/geron')
 api.add_resource(inf_one_arg_resources.TruthTable, '/api/v2/inf/truth_table')
+api.add_resource(inf_three_arg_resources.Translation, '/api/v2/inf/traslate')
 
 
 @app.route('/')
@@ -60,7 +62,7 @@ def algebra():
 @app.route('/gcd', methods=['GET', 'POST'])
 def gcd_page():
     form = GcdForm()
-    params = {'title': "НОД и НОК", 'form' : form}
+    params = {'title': "НОД и НОК", 'form': form}
     if form.validate_on_submit():
         gcd_data = {'a': form.first_number.data, 'b': form.second_number.data}
         result_gcd = requests.get('http://localhost:8080/api/v2/math/gcd', data=gcd_data).json()
@@ -79,6 +81,7 @@ def gcd_page():
         return render_template('gcd.html', **params)
     return render_template('gcd.html', **params)
 
+
 @app.route('/factorization', methods=['GET', 'POST'])
 def factorization_form():
     form = FactorizationForm()
@@ -94,6 +97,7 @@ def factorization_form():
             params['message'] = result['message']
         return render_template('factorization.html', **params)
     return render_template('factorization.html', **params)
+
 
 @app.route('/factorial', methods=['GET', 'POST'])
 def factorial_form():
@@ -115,6 +119,7 @@ def geometry():
     buttons = {'Посчитать площадь треугольника через стороны': 'geron'}
     return render_template('subject.html', title='Deskmate', sbj='Геометрия', btns=buttons)
 
+
 @app.route('/geron', methods=['GET', 'POST'])
 def geron_form():
     form = GeronForm()
@@ -133,15 +138,16 @@ def geron_form():
 @app.route('/informatics')
 def informatics():
     buttons = {'Построить таблицу истинности': 'create_table',
-               'Перевод между разными системами счисления' : 'translate'}
+               'Перевод между разными системами счисления': 'translate'}
     return render_template('subject.html', title='Deskmate', sbj='Информатика', btns=buttons)
+
 
 @app.route('/create_table', methods=['GET', 'POST'])
 def create_table_form():
     form = CreateTableForm()
     params = {'title': "Таблица истинности", 'form': form}
     if form.validate_on_submit():
-        table_data = {'inpt' : form.expression.data}
+        table_data = {'inpt': form.expression.data}
         result = requests.get('http://localhost:8080/api/v2/inf/truth_table', data=table_data).json()
         if result['success'] == 'OK':
             params['header'] = result['header']
@@ -151,9 +157,21 @@ def create_table_form():
         return render_template('truth_table.html', **params)
     return render_template('truth_table.html', **params)
 
+
 @app.route('/translate', methods=['GET', 'POST'])
 def translate():
     form = TranslateForm()
+    params = {'title': "Таблица истинности", 'form': form}
+    if form.validate_on_submit():
+        translate_data = {'a': form.first_number.data, 'b': form.first_step.data, 'c': form.second_step.data}
+        result = requests.get('http://localhost:8080/api/v2/inf/traslate', data=translate_data).json()
+        if result['success'] == 'OK':
+            params['result'] = result['result']
+        else:
+            params['message'] = result['message']
+        return render_template('translate.html', **params)
+    return render_template('translate.html', **params)
+
 
 @app.route('/login', methods=['GET', 'POST'])
 def login():
