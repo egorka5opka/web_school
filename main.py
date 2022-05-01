@@ -1,4 +1,4 @@
-from codecs import decode
+import os
 
 from flask import render_template, redirect, request, abort
 from flask_login import LoginManager, login_user, login_required, logout_user, current_user
@@ -15,8 +15,11 @@ from data.users import User
 from forms.register_form import RegisterForm
 from forms.history_event_from import EventForm
 from flask_restful import Api
+
+from tools.history.history_resources import HistoryListRes, HistoryEventRes
 from tools.login_resources import RegisterRes, LoginRes, Dude
-from tools.math import one_arg_resources, two_args_resources
+from tools.math import one_arg_resources, two_args_resources, three_args_resources, inf_one_arg_resources, \
+    inf_three_arg_resources
 import requests
 
 app = MainApp(__name__)
@@ -30,6 +33,11 @@ api.add_resource(one_arg_resources.FactorizationRes, '/api/v2/math/factorization
 api.add_resource(two_args_resources.GCDRes, '/api/v2/math/gcd')
 api.add_resource(two_args_resources.LCMRes, '/api/v2/math/lcm')
 api.add_resource(Dude, '/api/v2/dude')
+api.add_resource(HistoryListRes, '/api/v2/history/event')
+api.add_resource(HistoryEventRes, '/api/v2/history/event/<int:event_id>')
+api.add_resource(three_args_resources.GeronRes, '/api/v2/math/geron')
+api.add_resource(inf_one_arg_resources.TruthTable, '/api/v2/inf/truth_table')
+api.add_resource(inf_three_arg_resources.Translation, '/api/v2/inf/traslate')
 
 
 @app.route('/')
@@ -54,7 +62,7 @@ def history():
 @app.route('/history/events')
 @login_required
 def history_events():
-    events = requests.get('http://localhost:8080/api/v2/history/event').json()
+    events = requests.get(f'http://localhost:{port}/api/v2/history/event').json()
     params = {'title': 'Deskmate', 'events': list(filter(lambda e: e['user_id'] == current_user.id, events))}
     return render_template('history_events.html', **params)
 
@@ -65,7 +73,7 @@ def edit_event(event_id):
     form = EventForm()
     params = {'title': 'История', 'btn': 'Изменить'}
     if request.method == 'GET':
-        response = requests.get(f'http://localhost:8080/api/v2/history/event/{event_id}').json()
+        response = requests.get(f'http://localhost:{port}/api/v2/history/event/{event_id}').json()
         if response.get('success', 'failed') == 'failed':
             abort(404)
         event = response.get('event')
@@ -79,7 +87,7 @@ def edit_event(event_id):
                 'event': form.event.data,
                 'description': form.description.data,
                 'user_id': current_user.id}
-        result = requests.post(f'http://localhost:8080/api/v2/history/event/{event_id}', data=data).json()
+        result = requests.post(f'http://localhost:{port}/api/v2/history/event/{event_id}', data=data).json()
         if result.get('success', 'failed') == 'OK':
             return redirect('/history/events')
         params['message'] = result.get('message', 'Непердвиденная ошибка')
@@ -98,7 +106,7 @@ def add_event():
                 'event': form.event.data,
                 'description': form.description.data,
                 'user_id': current_user.id}
-        result = requests.post('http://localhost:8080/api/v2/history/event', data=data).json()
+        result = requests.post(f'http://localhost:{port}/api/v2/history/event', data=data).json()
         if result.get('success', 'failed') == 'OK':
             return redirect('/history/events')
         params['message'] = result.get('message', 'Непердвиденная ошибка')
@@ -108,7 +116,7 @@ def add_event():
 @app.route('/history/delete/<int:event_id>')
 @login_required
 def delete_event(event_id):
-    result = requests.delete(f'http://localhost:8080/api/v2/history/event/{event_id}').json()
+    result = requests.delete(f'http://localhost:{port}/api/v2/history/event/{event_id}').json()
     if result.get('success', 'failed') == 'failed':
         abort(404)
     return redirect('/history/events')
@@ -138,7 +146,7 @@ def import_events():
                     'event': title,
                     'description': text,
                     'user_id': current_user.id}
-            result = requests.post('http://localhost:8080/api/v2/history/event', data=data).json()
+            result = requests.post(f'http://localhost:{port}/api/v2/history/event', data=data).json()
             if result.get('success', 'failed') == 'failed':
                 params['message'] = result.get('message', 'Непердвиденная ошибка')
                 break
@@ -161,8 +169,8 @@ def gcd_page():
     params = {'title': "НОД и НОК", 'form': form}
     if form.validate_on_submit():
         gcd_data = {'a': form.first_number.data, 'b': form.second_number.data}
-        result_gcd = requests.get('http://localhost:8080/api/v2/math/gcd', data=gcd_data).json()
-        result_lcm = requests.get('http://localhost:8080/api/v2/math/lcm', data=gcd_data).json()
+        result_gcd = requests.get(f'http://localhost:{port}/api/v2/math/gcd', data=gcd_data).json()
+        result_lcm = requests.get(f'http://localhost:{port}/api/v2/math/lcm', data=gcd_data).json()
 
         if result_gcd['success'] == 'OK':
             params['result_gcd'] = result_gcd['result']
@@ -184,7 +192,7 @@ def factorization_form():
     params = {'title': "Факторизация", 'form': form}
     if form.validate_on_submit():
         fac_data = {'num': form.number.data}
-        result = requests.get('http://localhost:8080/api/v2/math/factorization', data=fac_data).json()
+        result = requests.get(f'http://localhost:{port}/api/v2/math/factorization', data=fac_data).json()
         print(result)
 
         if result['success'] == 'OK':
@@ -201,7 +209,7 @@ def factorial_form():
     params = {'title': "Факториал", 'form': form}
     if form.validate_on_submit():
         fac_data = {'num': form.number.data}
-        result = requests.get('http://localhost:8080/api/v2/math/factorial', data=fac_data).json()
+        result = requests.get(f'http://localhost:{port}/api/v2/math/factorial', data=fac_data).json()
         if result['success'] == 'OK':
             params['result'] = result['result']
         else:
@@ -222,7 +230,7 @@ def geron_form():
     params = {'title': "Факториал", 'form': form}
     if form.validate_on_submit():
         geron_data = {'a': form.first_number.data, 'b': form.second_number.data, 'c': form.third_number.data}
-        result = requests.get('http://localhost:8080/api/v2/math/geron', data=geron_data).json()
+        result = requests.get(f'http://localhost:{port}/api/v2/math/geron', data=geron_data).json()
         if result['success'] == 'OK':
             params['result'] = result['result']
         else:
@@ -244,7 +252,7 @@ def create_table_form():
     params = {'title': "Таблица истинности", 'form': form}
     if form.validate_on_submit():
         table_data = {'inpt': form.expression.data}
-        result = requests.get('http://localhost:8080/api/v2/inf/truth_table', data=table_data).json()
+        result = requests.get(f'http://localhost:{port}/api/v2/inf/truth_table', data=table_data).json()
         if result['success'] == 'OK':
             params['header'] = result['header']
             params['result'] = result['result']
@@ -260,7 +268,7 @@ def translate():
     params = {'title': "Таблица истинности", 'form': form}
     if form.validate_on_submit():
         translate_data = {'a': form.first_number.data, 'b': form.first_step.data, 'c': form.second_step.data}
-        result = requests.get('http://localhost:8080/api/v2/inf/traslate', data=translate_data).json()
+        result = requests.get(f'http://localhost:{port}/api/v2/inf/traslate', data=translate_data).json()
         if result['success'] == 'OK':
             params['result'] = result['result']
         else:
@@ -277,7 +285,7 @@ def login():
     if form.validate_on_submit():
         login_data = {'login': form.login.data,
                       'password': form.password.data}
-        result = requests.post('http://localhost:8080/api/v2/login', data=login_data).json()
+        result = requests.post(f'http://localhost:{port}/api/v2/login', data=login_data).json()
         if result['success'] == 'OK':
             login_user(load_user(result['user']['id']), remember=True)
             return redirect('/')
@@ -297,7 +305,7 @@ def register():
             return render_template('register.html', **params)
         register_data = {'login': form.login.data,
                          'password': form.password.data}
-        result = requests.post('http://localhost:8080/api/v2/register', data=register_data).json()
+        result = requests.post(f'http://localhost:{port}/api/v2/register', data=register_data).json()
         if result['success'] == 'OK':
             login_user(load_user(result['user']['id']), remember=True)
             return redirect('/')
@@ -331,4 +339,5 @@ def load_user(user_id: int):
 
 
 if __name__ == '__main__':
-    app.run(port=8080, host='127.0.0.1')
+    port = int(os.environ.get("PORT", 5000))
+    app.run(port=port, host='0.0.0.0')
