@@ -1,0 +1,38 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<div class="shadow-lg p-3 mb-5 bg-body centre-block">
+    <h1>Импорт событий</h1>
+    <br>
+    <p>Для импорта событий из файла:</p>
+    <ol>
+        <li>Создайте текстовый файл</li>
+        <li>Для каждого события поворите шаги 3 - 5</li>
+        <li>В одно строку разделив точкой с запятой запишите название и год события (обязательно число) <br>
+            Пример: "Создание интернета;1983"</li>
+        <li>Далее текстом запишите описание события</li>
+        <li>После конца описания поставьте сочетание символов "*/" (без кавычек)</li>
+        <li>Сохраните файл и загрузите ниже</li>
+    </ol>
+    <br>
+    <form action="" method="post" enctype="multipart/form-data" encoding="utf-8">
+        {{ form.hidden_tag() }}
+        <div>
+            {{ form.file.label }}<br>
+            {{ form.file(class="form-control input-field", encoding="utf-8") }}<br>
+            {% for error in form.file.errors %}
+                <p class="alert alert-danger" role="alert">
+                    {{ error }}
+                </p>
+            {% endfor %}
+        </div>
+        {% if message %}
+            <p class="alert alert-danger" role="alert">
+                {{message}}
+            </p>
+        {% endif %}
+        <p id="submit-par-btn">{{ form.submit(type="submit", class="btn btn-primary") }}</p>
+    </form>
+</div>
+{% endblock %}
