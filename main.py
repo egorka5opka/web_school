@@ -1,21 +1,23 @@
 import os
-
-from flask import render_template, redirect, request, abort
+from flask import render_template, redirect, request, abort, make_response
 from flask_login import LoginManager, login_user, login_required, logout_user, current_user
+from sqlalchemy import func
+
 from app.app import MainApp
 from data.db_session import create_session
+from data.history_events import HistoryEvent
 from forms.import_form import ImportForm
 from forms.login_form import LoginForm
 from forms.gcd_form import GcdForm
 from forms.factorization_form import FactorizationForm
 from forms.geron_from import GeronForm
 from forms.create_table import CreateTableForm
+from forms.training_form import TrainingForm
 from forms.translate_form import TranslateForm
 from data.users import User
 from forms.register_form import RegisterForm
 from forms.history_event_from import EventForm
 from flask_restful import Api
-
 from tools.history.history_resources import HistoryListRes, HistoryEventRes
 from tools.login_resources import RegisterRes, LoginRes, Dude
 from tools.math import one_arg_resources, two_args_resources, three_args_resources, inf_one_arg_resources, \
@@ -153,6 +155,30 @@ def import_events():
         else:
             return redirect('/history/events')
     return render_template('import_events.html', **params)
+
+
+@login_required
+@app.route('/history/training', methods=['GET', 'POST'])
+def training():
+    form = TrainingForm()
+    if form.validate_on_submit():
+        question_id = int(request.cookies.get("event_id", 0))
+        result = requests.get(f'http://localhost:{port}/api/v2/history/event/{question_id}').json()
+        event = result['event']
+        params = dict(title='Тренажер', form=form, **event)
+        params['right'] = (event['year'] == form.year.data)
+        res = make_response(render_template('training_response.html', **params))
+        return res
+    else:
+        session = create_session()
+        event = session.query(HistoryEvent).filter(HistoryEvent.user_id == current_user.id).\
+            order_by(func.random()).first()
+        params = {'title': 'Тренажер',
+                  'form': form,
+                  'question': f'В каком году произошло событие "{event.event}"?'}
+        res = make_response(render_template('training.html', **params))
+        res.set_cookie('event_id', str(event.id), max_age=60 * 60)
+        return res
 
 
 @app.route('/algebra')

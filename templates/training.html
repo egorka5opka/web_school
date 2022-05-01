@@ -1,0 +1,29 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<div class="shadow-lg p-3 mb-5 bg-body centre-block">
+    <h1>{{title}}</h1>
+    <div>
+        {{ question }}
+    </div>
+    <form action="" method="post">
+        {{ form.hidden_tag() }}
+        <div>
+            {{ form.year.label }}<br>
+            {{ form.year(class="form-control input-field", type="float") }}<br>
+            {% for error in form.year.errors %}
+                <p class="alert alert-danger" role="alert">
+                    {{ error }}
+                </p>
+            {% endfor %}
+        </div>
+        {% if message %}
+            <p class="alert alert-danger" role="alert">
+                {{message}}
+            </p>
+        {% endif %}
+        <div id="submit-par-btn">{{ form.submit(type="submit", class="btn btn-primary") }}</div>
+    </form>
+</div>
+{% endblock %}
