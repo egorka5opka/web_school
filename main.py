@@ -348,11 +348,6 @@ def logout():
     return redirect("/")
 
 
-@app.route('/algebra')
-def algebra_page():
-    return render_template('algebra.html', title='Математика')
-
-
 @app.route('/success')
 def success():
     return 'success'

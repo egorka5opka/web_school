@@ -117,12 +117,13 @@ header.header_first {
     background: #5B0009;
     color: #ffffff;
     border-radius: 25px;
+    font-size: 30px;
+
 }
 .button_creators:hover {
     box-shadow: 0px 0px 54px 1px rgba(91, 0, 9, 0.5);
 }
 .heading_creators {
-    width: 450px;
     height: 53px;
     margin-left: auto;
     margin-right: auto;
@@ -207,6 +208,21 @@ header.header_first {
 .table_inf_th, .table_inf_td {
    border: 2px solid #5B0009;
 }
+.button_history {
+    margin-left: 10px;
+    margin-top: 10px;
+    margin-bottom: 20px;
+    padding: 16px 24px;
+    background: #5B0009;
+    color: #ffffff;
+    border-radius: 10px;
+    font-size: 20px;
+    text-decoration: none;
+}
+.button_history:hover {
+    box-shadow: 0px 0px 10px 1px rgba(91, 0, 9, 0.5);
+    color: #ffffff;
+}
 
 main {
     margin-top: 110px;
@@ -262,6 +278,8 @@ form > p {
 .input-field {
     border-radius: 20px;
     background: white;
+    color: #5B0009;
+    font-size: 25px;
     box-shadow: inset 0 0 72px 2px rgba(91, 0, 9, 0.25);
     border: none;
 }

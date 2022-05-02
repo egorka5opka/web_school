@@ -7,12 +7,12 @@
     {% if right %}
         <div class="alert alert-success" role="alert"> Ваш ответ верный! :D </div>
     {% else %}
-        <div class="alert alert-danger" role="alert"> Ваш ответ верный! :( </div>
+        <div class="alert alert-danger" role="alert"> Ваш ответ неверный! :( </div>
     {% endif %}
-    <h4>
+    <p style="font-size: 35px; color: #5B0009; text-align: center;">
         {{ event }} - {{ year }}
-    </h4>
-    <p> {{ description }} </p>
+    </p>
+    <p style="font-size: 25px; color: #5B0009; text-align: center;"> {{ description }} </p>
     <form action="" method="post">
         <div id="submit-par-btn"> <button type="submit" class="btn btn-primary"> Дальше </button> </div>
     </form>
