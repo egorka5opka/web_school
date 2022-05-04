@@ -45,12 +45,12 @@ api.add_resource(inf_three_arg_resources.Translation, '/api/v2/inf/traslate')
 @app.route('/')
 @app.route('/index')
 def index():
-    return render_template('index.html', title='Deskmate')
+    return render_template('index.html', title='webmate')
 
 
 @app.route('/creators')
 def creators():
-    return render_template('creators.html', title='Deskmate')
+    return render_template('creators.html', title='webmate')
 
 
 @app.route('/history')
@@ -65,7 +65,7 @@ def history():
 @login_required
 def history_events():
     events = requests.get(f'http://localhost:{port}/api/v2/history/event').json()
-    params = {'title': 'Deskmate', 'events': list(filter(lambda e: e['user_id'] == current_user.id, events))}
+    params = {'title': 'webmate', 'events': list(filter(lambda e: e['user_id'] == current_user.id, events))}
     return render_template('history_events.html', **params)
 
 
@@ -131,29 +131,33 @@ def import_events():
     params = {'title': 'Импорт событий',
               'form': form}
     if form.validate_on_submit():
-        f = form.file.data.stream
-        f2 = f.read().decode('utf-8')
-        lines = [line.strip() for line in f2.split('\n')]
-        i = 0
-        while i < len(lines):
-            title, year = lines[i].split(';')
-            i += 1
-            text = ''
+        try:
+            f = form.file.data.stream
+            f2 = f.read().decode('utf-8')
+            lines = [line.strip() for line in f2.split('\n')]
+            i = 0
             while i < len(lines):
-                text += lines[i]
+                title, year = lines[i].split(';')
                 i += 1
-                if text.endswith('*/'):
+                text = ''
+                while i < len(lines):
+                    text += lines[i]
+                    i += 1
+                    if text.endswith('*/'):
+                        text = text[:-2]
+                        break
+                data = {'year': int(year.strip()),
+                        'event': title,
+                        'description': text,
+                        'user_id': current_user.id}
+                result = requests.post(f'http://localhost:{port}/api/v2/history/event', data=data).json()
+                if result.get('success', 'failed') == 'failed':
+                    params['message'] = result.get('message', 'Непердвиденная ошибка')
                     break
-            data = {'year': int(year.strip()),
-                    'event': title,
-                    'description': text,
-                    'user_id': current_user.id}
-            result = requests.post(f'http://localhost:{port}/api/v2/history/event', data=data).json()
-            if result.get('success', 'failed') == 'failed':
-                params['message'] = result.get('message', 'Непердвиденная ошибка')
-                break
-        else:
-            return redirect('/history/events')
+            else:
+                return redirect('/history/events')
+        except BaseException as e:
+            params['message'] = 'Не удалось прочитать файл'
     return render_template('import_events.html', **params)
 
 
@@ -165,7 +169,7 @@ def training():
         question_id = int(request.cookies.get("event_id", 0))
         result = requests.get(f'http://localhost:{port}/api/v2/history/event/{question_id}').json()
         event = result['event']
-        params = dict(title='Тренажер', form=form, **event)
+        params = dict(title='Тренажер', **event)
         params['right'] = (event['year'] == form.year.data)
         res = make_response(render_template('training_response.html', **params))
         return res
@@ -173,6 +177,10 @@ def training():
         session = create_session()
         event = session.query(HistoryEvent).filter(HistoryEvent.user_id == current_user.id).\
             order_by(func.random()).first()
+        if not event:
+            return render_template('training_response.html', title='Тренажер', event='Ошибка',
+                                   year='у вас нет ни одного события',
+                                   description='Перейдите во вкладку история и создайте записи - исторические события')
         params = {'title': 'Тренажер',
                   'form': form,
                   'question': f'В каком году произошло событие "{event.event}"?'}
@@ -186,7 +194,7 @@ def algebra():
     buttons = {'НОД и НОК': 'gcd',
                'Разложить на простые': 'factorization',
                'Факториал числа': 'factorial'}
-    return render_template('subject.html', title='Deskmate', sbj='Алгебра', btns=buttons)
+    return render_template('subject.html', title='webmate', sbj='Алгебра', btns=buttons)
 
 
 @app.route('/gcd', methods=['GET', 'POST'])
@@ -247,13 +255,13 @@ def factorial_form():
 @app.route('/geometry')
 def geometry():
     buttons = {'Посчитать площадь треугольника через стороны': 'geron'}
-    return render_template('subject.html', title='Deskmate', sbj='Геометрия', btns=buttons)
+    return render_template('subject.html', title='webmate', sbj='Геометрия', btns=buttons)
 
 
 @app.route('/geron', methods=['GET', 'POST'])
 def geron_form():
     form = GeronForm()
-    params = {'title': "Факториал", 'form': form}
+    params = {'title': "Формула Герона", 'form': form}
     if form.validate_on_submit():
         geron_data = {'a': form.first_number.data, 'b': form.second_number.data, 'c': form.third_number.data}
         result = requests.get(f'http://localhost:{port}/api/v2/math/geron', data=geron_data).json()
@@ -269,7 +277,7 @@ def geron_form():
 def informatics():
     buttons = {'Построить таблицу истинности': 'create_table',
                'Перевод между разными системами счисления': 'translate'}
-    return render_template('subject.html', title='Deskmate', sbj='Информатика', btns=buttons)
+    return render_template('subject.html', title='webmate', sbj='Информатика', btns=buttons)
 
 
 @app.route('/create_table', methods=['GET', 'POST'])
@@ -361,4 +369,5 @@ def load_user(user_id: int):
 
 if __name__ == '__main__':
     port = int(os.environ.get("PORT", 5000))
+    print(port)
     app.run(port=port, host='0.0.0.0')
